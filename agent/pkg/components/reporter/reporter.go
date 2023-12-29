@@ -1,20 +1,22 @@
 package reporter
 
 import (
-	"github.com/omarbdrn/simple_agent/internal/api"
-	"github.com/omarbdrn/simple_agent/pkg/constants"
+	"fmt"
+
 	"github.com/omarbdrn/simple_agent/pkg/models"
 )
 
 func Report(hostService models.HostServices) {
-	if len(hostService.Ports) > 0 {
-		request := api.HTTPRequest{
-			Endpoint: constants.SubmitHostEndpoint,
-			Method:   "POST",
-			IsJson:   true,
-			Body:     hostService,
-		}
+	fmt.Println(hostService.IP, hostService.Ports)
 
-		_, _ = api.PerformRequest(request)
-	}
+	// if len(hostService.Ports) > 0 {
+	// 	request := api.HTTPRequest{
+	// 		Endpoint: constants.SubmitHostEndpoint,
+	// 		Method:   "POST",
+	// 		IsJson:   true,
+	// 		Body:     hostService,
+	// 	}
+
+	// 	_, _ = api.PerformRequest(request)
+	// }
 }

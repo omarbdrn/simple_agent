@@ -7,15 +7,11 @@ import (
 	"github.com/omarbdrn/simple_agent/internal/api"
 	"github.com/omarbdrn/simple_agent/internal/configuration"
 	"github.com/omarbdrn/simple_agent/pkg/constants"
+	"github.com/omarbdrn/simple_agent/pkg/global"
+	"github.com/omarbdrn/simple_agent/pkg/models"
 )
 
-type Share struct {
-	ID    int      `json:"id"`
-	Name  string   `json:"name"`
-	CIDRs []string `json:"cidrs"`
-}
-
-func GetShare() (*Share, error) {
+func GetShare() (*models.Share, error) {
 	systemCapabilities := configuration.GetSystemCapabilities()
 
 	request := api.HTTPRequest{
@@ -31,16 +27,18 @@ func GetShare() (*Share, error) {
 
 	response, err := api.PerformRequest(request)
 	if err != nil {
-		return &Share{}, err
+		return &models.Share{}, err
 	}
 
 	defer response.Body.Close()
 
-	var result Share
+	var result models.Share
 	err = json.NewDecoder(response.Body).Decode(&result)
 	if err != nil {
-		return &Share{}, err
+		return &models.Share{}, err
 	}
+
+	global.SetCurrentShare(result)
 
 	return &result, nil
 }

@@ -15,3 +15,9 @@ type Service struct {
 	Version  string
 	Metadata plugins.Metadata
 }
+
+type Share struct {
+	ID    int      `json:"id"`
+	Name  string   `json:"name"`
+	CIDRs []string `json:"cidrs"`
+}

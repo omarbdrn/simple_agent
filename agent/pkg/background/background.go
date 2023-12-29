@@ -6,12 +6,16 @@ import (
 	"syscall"
 
 	"github.com/omarbdrn/simple_agent/internal/radio"
+	"github.com/omarbdrn/simple_agent/pkg/server"
 )
 
 func RunService() {
 	quitChan := make(chan struct{})
 
+	mqServer := server.NewListener()
+
 	go backgroundService(quitChan)
+	go mqServer.ConnectMQ("agent", "agent", "simpleagent")
 	go radio.StartRadio()
 
 	sigChan := make(chan os.Signal, 1)
@@ -20,4 +24,5 @@ func RunService() {
 	_ = <-sigChan
 
 	close(quitChan)
+	defer mqServer.DisconnectMQ()
 }
