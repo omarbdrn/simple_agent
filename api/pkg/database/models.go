@@ -34,3 +34,26 @@ type Question struct {
 	CreatedAt     time.Time
 	LastScannedAt time.Time
 }
+
+type Host struct {
+	gorm.Model
+	ID       uint   `gorm:"primaryKey"`
+	IP       string `gorm:"unique"`
+	Services []Service
+
+	CreatedAt time.Time
+	UpdatedAt time.Time
+}
+
+type Service struct {
+	gorm.Model
+	ID       uint `gorm:"primaryKey"`
+	Port     int
+	Protocol string
+	Version  string
+	Metadata string
+
+	CreatedAt time.Time
+	UpdatedAt time.Time
+	HostID    uint
+}

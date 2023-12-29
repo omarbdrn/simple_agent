@@ -31,6 +31,9 @@ func InitDB() error {
 	db.AutoMigrate(
 		&Share{},
 		&IPRange{},
+		&Question{},
+		&Host{},
+		&Service{},
 	)
 
 	return nil

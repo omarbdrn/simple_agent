@@ -36,7 +36,7 @@ func (scm *Connection) ParseAnswer(answer MQResponse) {
 }
 
 func CheckQuestion(ip_range string) {
-	time.Sleep(60 * time.Second)
+	time.Sleep(5 * time.Second)
 	var question database.Question
 
 	db := database.GetDB()

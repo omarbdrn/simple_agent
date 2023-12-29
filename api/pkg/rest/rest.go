@@ -13,6 +13,7 @@ import (
 
 func RunRestServer(mqServer *server.Connection) {
 	app := fiber.New()
+	dpr := database.NewDatabaseReporter()
 
 	app.Get("/api/v1/shares/free", func(c *fiber.Ctx) error {
 		c.Set("Content-Type", "application/json")
@@ -107,7 +108,33 @@ func RunRestServer(mqServer *server.Connection) {
 		return c.JSON(jsonResponse)
 	})
 
-	// app.Post("/api/v1/hosts")
+	app.Get("/api/v1/hosts", func(c *fiber.Ctx) error {
+		c.Set("Content-Type", "application/json")
+
+		jsonResponse := map[string]interface{}{
+			"status": "200",
+			"hosts":  dpr.GetHosts(),
+		}
+
+		return c.JSON(jsonResponse)
+	})
+
+	app.Post("/api/v1/hosts", func(c *fiber.Ctx) error {
+		c.Accepts("application/json")
+
+		hostService := new(database.HostServicesDTO)
+		if err := c.BodyParser(hostService); err != nil {
+			return c.SendStatus(500)
+		}
+
+		jsonResponse := map[string]string{
+			"status": "200",
+		}
+
+		dpr.AddHost(hostService)
+
+		return c.JSON(jsonResponse)
+	})
 
 	app.Listen("127.0.0.1:6453")
 }
